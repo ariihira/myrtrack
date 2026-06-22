@@ -1,0 +1,253 @@
+/* ==========================================================================
+   SHARED CONTAINER & COLLECTIONS SYSTEM (TOP HALF)
+   ========================================================================== */
+
+.collections-container {
+    padding: 20px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+}
+
+.collections-header {
+    margin-bottom: 30px;
+}
+
+.collections-header h1 {
+    font-size: 2.2rem;
+    margin: 0;
+    color: #000;
+    font-weight: 700;
+}
+
+.collection-group {
+    margin-bottom: 45px; 
+}
+
+.group-header {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 18px;
+    border-bottom: 1px solid #000; 
+    padding-bottom: 6px;
+}
+
+.group-header h2 {
+    font-size: 1.3rem;
+    margin: 0;
+    color: #000;
+    font-weight: 700;
+}
+
+.group-count {
+    color: #777;
+    font-size: 0.9rem;
+    font-weight: 400;
+}
+
+/* --- Standard Grid (Shows) --- */
+.standard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+}
+
+.standard-card a {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
+.standard-thumb {
+    aspect-ratio: 16 / 9;
+    background-size: cover;
+    background-position: center;
+    border-radius: 4px;
+    background-color: #eee;
+    width: 100%;
+    transition: transform 0.3s ease;
+}
+
+.standard-title {
+    margin-top: 10px;
+    font-size: 1rem;
+    font-weight: 500;
+    line-height: 1.3;
+    color: #000;
+}
+
+.standard-card:hover .standard-thumb {
+    transform: translateY(-5px);
+}
+
+
+/* ==========================================================================
+   EXACT REPLICATED K-TIMELINE DESIGN SYSTEM (BOTTOM HALF)
+   ========================================================================== */
+
+.kt-stream {
+    display: flex;
+    flex-direction: column;
+}
+
+/* --- Month Divider --- */
+.kt-month-divider {
+    font-size: 0.75rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: #d4a373; /* Muted Gold */
+    margin: 60px 0 30px 0;
+    padding-left: 120px;
+}
+
+/* --- Replicated Timeline Card Layout --- */
+.kt-card {
+    display: grid;
+    grid-template-columns: 100px 1fr;
+    gap: 20px;
+    background: #fff;
+    border: 1px solid #e0ddd5;
+    border-radius: 2px;
+    padding: 25px;
+    margin-bottom: 15px;
+    transition: 0.3s ease;
+}
+
+.kt-card:hover {
+    border-color: #d35400; /* Replicated orange highlight toggle */
+    box-shadow: 0 10px 30px rgba(0,0,0,0.03);
+}
+
+.kt-side-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    border-right: 1px solid #f2f2f2;
+    padding-right: 20px;
+    gap: 4px;
+}
+
+.kt-date {
+    font-family: 'JetBrains Mono', monospace;
+    font-weight: 700;
+    font-size: 1rem;
+    color: #1a1a1a;
+}
+
+/* --- Status Tags --- */
+.kt-tag {
+    font-size: 0.6rem;
+    font-weight: 900;
+    padding: 3px 8px;
+    border-radius: 3px;
+    margin-top: 8px;
+    letter-spacing: 1px;
+    text-align: center;
+    width: 60px;
+}
+
+.tag-owner { background: #fff5eb; color: #d35400; border: 1px solid #ffe8d6; }
+.tag-mc { background: #f3f0ff; color: #6741d9; border: 1px solid #e5dbff; }
+.tag-guest { background: #f1f3f5; color: #495057; border: 1px solid #e9ecef; }
+
+.tag-extra {
+    background: #f8f9fa;
+    color: #b2bec3;
+    border: 1px solid #e0ddd5;
+    margin-top: 5px;
+    font-size: 0.55rem;
+    font-weight: 700;
+}
+
+/* --- Main Info Content --- */
+.kt-main-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.kt-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    font-size: 0.7rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #8e8e8e;
+    margin-bottom: 10px;
+    gap: 20px;
+}
+
+.kt-owning {
+    color: #d35400; /* Replicated Burned Orange */
+    text-align: right;
+    max-width: 60%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.kt-card:hover .kt-owning {
+    white-space: normal;
+    overflow: visible;
+}
+
+.kt-video-title {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: #1a1a1a;
+    margin: 0 0 15px 0;
+    line-height: 1.3;
+}
+
+.kt-ep {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    color: #d4a373;
+    margin-right: 8px;
+    background: #fdfaf7;
+    padding: 2px 6px;
+    border: 1px solid #f2eee9;
+}
+
+.kt-details {
+    font-size: 0.85rem;
+    margin-top: 8px;
+    display: flex;
+    gap: 15px;
+}
+
+.kt-label {
+    font-weight: 900;
+    font-size: 0.6rem;
+    color: #b2bec3;
+    min-width: 80px;
+    text-transform: uppercase;
+    margin-top: 4px;
+}
+
+.kt-val { 
+    color: #3c3c3c; 
+    line-height: 1.6; 
+    flex: 1;
+}
+
+/* ==========================================================================
+   GLOBAL SEARCH ELEMENT REFACTOR MATCH HIGHLIGHTS
+   ========================================================================== */
+
+/* Keeps your bold match colors matching the exact timeline palette rules */
+.collections-container b {
+    color: #d35400;
+    font-weight: 800;
+    background: rgba(211, 84, 0, 0.05);
+    padding: 0 2px;
+    border-radius: 2px;
+}
+
+.search-empty-subtext {
+    color: #8e8e8e;
+    font-style: italic;
+    font-size: 0.95rem;
+    padding: 15px 0 0 5px;
+}

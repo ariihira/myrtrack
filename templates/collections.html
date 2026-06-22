@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/collections.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="collections-container">
+    <header class="collections-header">
+        <h1>{{ title }}</h1>
+    </header>
+
+    {% for section_label, shows in sectioned_data.items() %}
+    {% if shows %}
+    <section class="collection-group">
+        <div class="group-header">
+            <h2>{{ section_label }}</h2>
+            <span class="group-count">{{ shows|length }}</span>
+        </div>
+        
+        <div class="standard-grid">
+            {% for show in shows %}
+            <div class="standard-card">
+                <a href="{{ url_for('show_detail', show_id=show.title_id) }}">
+                    <div class="standard-thumb" style="background-image: url('{{ url_for('static', filename=show.title_img) }}')"></div>
+                    <p class="standard-title">{{ show.title }}</p>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+    {% endif %}
+    {% endfor %}
+</div>
+{% endblock %}

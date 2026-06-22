@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block title %}{{ group }} Archive{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/archive.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="archive-container">
+    <header class="archive-header">
+        <h1>{{ group }}</h1>
+    </header>
+
+    {# --- COMPACT SUBUNIT GLIMPSE (Differentiated & Small) --- #}
+    {% if scope == 'main' and previews %}
+    <section class="subunit-glimpse-section">
+        <p class="glimpse-label">Subunit Quick Directory</p>
+        <div class="subunit-list-container">
+            {% for sub in previews %}
+            <div class="subunit-column">
+                <h4>{{ sub.group_name }}</h4>
+                <div class="compact-list">
+                    {% for show in sub.shows %}
+                    <a href="/show/{{ show.title_id }}?group_id={{ sub.group_id or group_id }}" class="compact-item">
+                        <div class="mini-thumb" style="background-image: url('{{ url_for('static', filename=show.title_img) }}')"></div>
+                        <span class="mini-title">{{ show.title }}</span>
+                    </a>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+    <hr class="separator">
+    {% endif %}
+
+    {# --- STANDARD MAIN ARCHIVE (Original Sizing) --- #}
+    <div class="main-archive-body">
+        {% macro render_section(label, data, context_group_id) %}
+        {% if data %}
+        <section class="category-group">
+            <div class="category-header">
+                <h2>{{ label }}</h2>
+                <span class="category-count">{{ data|length }}</span>
+            </div>
+            <div class="standard-grid">
+                {% for show in data %}
+                <div class="standard-card">
+                    <a href="/show/{{ show.title_id }}?group_id={{ target_id }}&scope={{ scope }}">
+                        <div class="standard-thumb" style="background-image: url('{{ url_for('static', filename=show.title_img) }}')"></div>
+                        <p class="standard-title">{{ show.title }}</p>
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+        {% endif %}
+        {% endmacro %}
+
+        {{ render_section('Series', gseries, group_id) }}
+        {{ render_section('Variety', gvariety, group_id) }}
+        {{ render_section('Original Stuff', goriginals, group_id) }}
+        {{ render_section('TV Shows', gtvshow, group_id) }}
+        {{ render_section('Livestreams', glive, group_id) }}
+        {{ render_section('Comeback Specials', gcomeback, group_id) }}
+        {{ render_section('Concerts', gcon, group_id) }}
+        {{ render_section('Movie/DVD', gmove, group_id) }}
+        {{ render_section('Radio & Podcast', gradpod, group_id) }}
+        {{ render_section('Music Show MC', gmushow, group_id) }}
+        {{ render_section('Dramas', gdrama, group_id) }}
+        {{ render_section('Events', gevents, group_id) }}
+        {{ render_section('Misc', gothers, group_id) }}
+    </div>
+</div>
+{% endblock %}

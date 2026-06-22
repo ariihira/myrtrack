@@ -1,0 +1,179 @@
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="home-welcome">
+    <h1>Welcome to my Archive</h1>
+    <p>A structured database of global media, from K-Pop expansions to Western series.</p>
+    <p>Also where I apparently collect idols like pokemons.</p>
+</div>
+
+<div class="home-grid">
+    <section class="bento-box leaderboard-deck">
+        <div class="box-header">
+            <h3>Archive Records & Insights</h3>
+        </div>
+        
+        <div class="leaderboard-grid-mesh">
+            <div class="record-row">
+                <div class="record-meta">
+                    <span class="record-title">Group: Most Content</span>
+                    <span class="record-holder text-ellipsis">{{ records.group_most_videos.label }}</span>
+                </div>
+                <div class="record-score">
+                    <span class="score-num">{{ records.group_most_videos.count }}</span>
+                    <span class="score-label">videos</span>
+                </div>
+            </div>
+
+            <div class="record-row">
+                <div class="record-meta">
+                    <span class="record-title">Group: Most Shows Owned</span>
+                    <span class="record-holder text-ellipsis">{{ records.group_most_owned.label }}</span>
+                </div>
+                <div class="record-score">
+                    <span class="score-num">{{ records.group_most_owned.count }}</span>
+                    <span class="score-label">shows</span>
+                </div>
+            </div>
+
+            <div class="record-row">
+                <div class="record-meta">
+                    <span class="record-title">Group: Most MC Gig</span>
+                    <span class="record-holder text-ellipsis">{{ records.group_most_mc.label }}</span>
+                </div>
+                <div class="record-score">
+                    <span class="score-num">{{ records.group_most_mc.count }}</span>
+                    <span class="score-label">videos</span>
+                </div>
+            </div>
+
+            <div class="record-row">
+                <div class="record-meta">
+                    <span class="record-title">Group: Most Livestream</span>
+                    <span class="record-holder text-ellipsis">{{ records.group_most_live.label }}</span>
+                </div>
+                <div class="record-score">
+                    <span class="score-num">{{ records.group_most_live.count }}</span>
+                    <span class="score-label">streams</span>
+                </div>
+            </div>
+
+            <div class="record-row">
+                <div class="record-meta">
+                    <span class="record-title">Member: Most Guest Appearance</span>
+                    <span class="record-holder text-ellipsis">{{ records.member_most_guest.label }}</span>
+                </div>
+                <div class="record-score">
+                    <span class="score-num">{{ records.member_most_guest.count }}</span>
+                    <span class="score-label">entries</span>
+                </div>
+            </div>
+
+            <div class="record-row">
+                <div class="record-meta">
+                    <span class="record-title">Member: Most Solo Content</span>
+                    <span class="record-holder text-ellipsis">{{ records.member_most_videos.label }}</span>
+                </div>
+                <div class="record-score">
+                    <span class="score-num">{{ records.member_most_videos.count }}</span>
+                    <span class="score-label">videos</span>
+                </div>
+            </div>
+
+            <div class="record-row">
+                <div class="record-meta">
+                    <span class="record-title">Member: Most Solo Livestream</span>
+                    <span class="record-holder text-ellipsis">{{ records.member_most_live.label }}</span>
+                </div>
+                <div class="record-score">
+                    <span class="score-num">{{ records.member_most_live.count }}</span>
+                    <span class="score-label">streams</span>
+                </div>
+            </div>
+
+            <div class="record-row">
+                <div class="record-meta">
+                    <span class="record-title">Most Stamped Track</span>
+                    <span class="record-holder text-ellipsis" title="{{ records.most_stamped_song.label }}">{{ records.most_stamped_song.label }}</span>
+                </div>
+                <div class="record-score">
+                    <span class="score-num">{{ records.most_stamped_song.count }}</span>
+                    <span class="score-label">stamps</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="stats-container">
+        <div class="stat-banner member-banner">
+            <span class="banner-label">Active Idols</span>
+            <span class="banner-num">{{ total_members }}</span>
+        </div>
+
+        <section class="bento-box stats-grid">
+            <div class="stat-card">
+                <span class="num">{{ counts.get('bg', 0) }}</span>
+                <span class="label">Boygroups</span>
+            </div>
+            <div class="stat-card">
+                <span class="num">{{ counts.get('gg', 0) }}</span>
+                <span class="label">Girlgroups</span>
+            </div>
+            <div class="stat-card">
+                <span class="num">{{ counts.get('band', 0) }}</span>
+                <span class="label">Bands</span>
+            </div>
+            <div class="stat-card">
+                <span class="num">{{ counts.get('coed', 0) }}</span>
+                <span class="label">Co-Ed</span>
+            </div>
+            <div class="stat-card">
+                <span class="num">{{ counts.get('solo', 0) }}</span>
+                <span class="label">Soloists</span>
+            </div>
+        </section>
+
+        <div class="stat-banner video-banner">
+            <span class="banner-label">Total Videos Indexed</span>
+            <span class="banner-num">{{ total_videos }}</span>
+        </div>
+
+        <section class="bento-box category-stats">
+            <div class="box-header">
+                <h3>Library by Category</h3>
+            </div>
+            <div class="cat-list">
+                {% for cat in category_stats %}
+                <div class="cat-row">
+                    <span class="cat-name">{{ cat.category_name }}</span>
+                    <span class="cat-dots"></span>
+                    <span class="cat-val">{{ cat.show_count }}</span>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+    </div>
+</div>
+
+<div class="home-disclaimer">
+    <section class="disclaimer-box">
+        <div class="disclaimer-header">
+            <span class="disclaimer-icon">ⓘ</span>
+            <h3>Disclaimer</h3>
+        </div>
+        <p>
+            This website is a personal project maintained in my free time. The content here reflects what I have watched and serves as my own tracking system. 
+            All entries are filtered based on what I am able to find and verify. If something is missing, it may be because I haven’t watched it yet, 
+            couldn’t verify the original source, or was unable to locate the original content.
+        </p>
+        <p class="disclaimer-footer">Please keep this in mind, thank you.</p>
+    </section>
+</div>
+
+{% endblock %}

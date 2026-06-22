@@ -1,0 +1,81 @@
+/* collections.css */
+
+.collections-container {
+    padding: 20px;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+}
+
+.collections-header {
+    margin-bottom: 30px;
+}
+
+.collections-header h1 {
+    font-size: 2.2rem;
+    margin: 0;
+    color: #000;
+    font-weight: 700;
+}
+
+/* --- Section Grouping --- */
+.collection-group {
+    margin-bottom: 45px; 
+}
+
+.group-header {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 18px;
+    border-bottom: 1px solid #000; 
+    padding-bottom: 6px;
+}
+
+.group-header h2 {
+    font-size: 1.3rem;
+    margin: 0;
+    color: #000;
+    font-weight: 700;
+}
+
+.group-count {
+    color: #777;
+    font-size: 0.9rem;
+    font-weight: 400;
+}
+
+/* --- Standard Grid --- */
+.standard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+}
+
+.standard-card a {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
+.standard-thumb {
+    aspect-ratio: 16 / 9;
+    background-size: cover;
+    background-position: center;
+    border-radius: 4px;
+    background-color: #eee;
+    width: 100%;
+    /* Transition applied to the image only */
+    transition: transform 0.3s ease;
+}
+
+.standard-title {
+    margin-top: 10px;
+    font-size: 1rem;
+    font-weight: 500;
+    line-height: 1.3;
+    color: #000;
+}
+
+/* --- Hover Animation (Image Only) --- */
+.standard-card:hover .standard-thumb {
+    transform: translateY(-5px); /* Only the picture lifts */
+}

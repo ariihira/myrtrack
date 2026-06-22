@@ -1,0 +1,200 @@
+{% extends "base.html" %}
+
+{% block title %}{{ show.title }}{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/showtitle.css') }}">
+{% endblock %}
+
+{% block content %}
+<header class="show-header">
+    <div class="show-poster-mini">
+        <img src="{{ url_for('static', filename=show.title_img) }}" alt="{{ show.title }}">
+    </div>
+    
+    <div class="show-title-area">
+        <div class="badge-group">
+            {# 1. Define all category IDs or showtitle IDs that should hide the ownership badge #}
+            {% set hidden_ids = [1, 7, 8, 9, 16, 17, 18, 19, 20, 21] %} 
+            {% set manualhide_id = show.title_id in [285] %} 
+        
+            {# 2. Create a list to act as a flag (List scope persists outside loops) #}
+            {% set match_found = [] %}
+        
+            {# 3. Standard loop check #}
+            {% for id in show.category_ids %}
+                {% if id in hidden_ids %}
+                    {{ match_found.append(1) or "" }}
+                {% endif %}
+            {% endfor %}
+
+            {# 4. Only show group badges if the 'match_found' list is empty #}
+            {% if not match_found and not manualhide_id and show.ownership_groups %}
+                {% set groups = show.ownership_groups.split(', ') if show.ownership_groups is string else show.ownership_groups %}
+                {% for group in groups %}
+                    <span class="badge owner-badge">{{ group }}</span>
+                {% endfor %}
+            {% endif %}
+
+            {# Only show badges if they are not 'None' or empty #}
+            {% if show.releaseYear %}<span class="badge">{{ show.releaseYear }}</span>{% endif %}
+            {% if show.category_names and show.category_names != 'None' %}
+                {% set categories = show.category_names.split(', ') if show.category_names is string else show.category_names %}
+                {% for cat in categories %}
+                    <span class="badge cat-badge">{{ cat }}</span>
+                {% endfor %}
+            {% endif %}
+            {% if show.totalSeasons and show.totalSeasons != 'None' %}
+                <span class="badge">{{ show.totalSeasons }} Season{{ 's' if show.totalSeasons|int > 1 else '' }}</span>
+            {% endif %}
+            {% if show.totalEpisodes and show.totalEpisodes != 'None' %}
+                <span class="badge">{{ show.totalEpisodes }} Episode{{ 's' if show.totalEpisodes|int > 1 else '' }}</span>
+            {% endif %}
+            {% if show.watchStatus and show.watchStatus != 'None' and show.watchStatus != 'Not Started' %}
+                <span class="badge">{{ show.watchStatus }}</span>
+            {% endif %}
+            
+
+        </div>
+        <h1>{{ show.title }}</h1>
+    </div>
+</header>
+
+{% if videos %}
+    {# === CATEGORY DEFINITIONS === #}
+    {% set is_variety = show.variety == 1 %}
+    {% set is_music_show = 7 in show.category_ids %}
+    {% set is_livestream = 12 in show.category_ids %}
+    {% set is_originals = 11 in show.category_ids %}
+    {% set show_hosts = is_originals and show.title_id in [103, 105, 108, 115, 122, 150] %}
+    {% set show_guests = is_variety or 16 in show.category_ids %}
+    {% set suppress_se = is_livestream or 16 in show.category_ids or is_originals %}
+    {% set if_series = 2 in show.category_ids or 3 in show.category_ids %}
+    {% set suppress_notes_slot = if_series or is_music_show %}
+
+    <div class="archive-body">
+
+        {# Restore original Namespace state management for headers #}
+        {% set ns = namespace(last_season='') %}
+        
+        {% for video in videos %}
+
+            {% set current_season_value = video.season if video.season else '' %}
+
+            {# EXACT SEASON HEADER LOGIC FROM ORIGINAL PROJECT #}
+            {% if current_season_value and current_season_value != 'Season -' and current_season_value != ns.last_season %}
+                {% set season_name = show.season_names.get(current_season_value, none) %}
+                <div class="season-label">
+                    {% if video.is_numeric_season %}
+                        {% set season_number = current_season_value | int %}
+                        {% if season_number < 1000 %}Season {{ current_season_value }}{% else %}{{ current_season_value }}{% endif %}
+                        {{ ': ' ~ season_name if season_name else '' }}
+                    {% else %}
+                        {% if current_season_value == 'SPE' %}SPE{% else %}Season: {{ current_season_value }}{{ ': ' ~ season_name if season_name else '' }}{% endif %}
+                    {% endif %}
+                </div>
+                {% set ns.last_season = current_season_value %}
+            {% endif %}
+
+            {# BEHIND LOGIC: Distinguish between Episode Behind and Season Behind + the Extras #}
+            {% set has_ep = video.episodeNumber and video.episodeNumber != '' %}
+            {% set is_behind = video.title_extras == 'Behind' %}
+            {% set is_extra = video.title_extras and video.title_extras != 'Behind' %}
+
+            {# It is only a child if it has an Episode relation #}
+            {% set is_ep_child = (is_behind or is_extra) and has_ep %}
+            {% set is_season_wrap = is_behind and not video.has_ep_relation %}
+
+            <article class="video-unit 
+                {{ 'is-behind' if (is_behind or is_extra) else '' }} 
+                {{ 'ep-connector' if is_ep_child else '' }} 
+                {{ 'season-wrap' if is_season_wrap else '' }}
+                {{ 'group-highlight' if video.is_group_context else '' }}">
+                
+                <div class="unit-id-section">
+                    <div class="id-date-bundle">
+                        <span class="id-tag">
+                            {% if not suppress_se %}
+                                {# Only show metadata if the season is a standard number (1-1000) #}
+                                {% if video.season and video.season | int <= 1000 -%}
+                                    {% if not (video.season is string and not video.is_numeric_season) %}S{% endif %}{{ video.season }}
+                                {% endif %}
+
+                                {% set ep_val = video.episodeNumber | string | trim %}
+                                {% if ep_val %}
+                                    {% if video.is_numeric_episode %}E{% endif %}{{ ep_val }}
+                                {% endif %}
+                            {% endif %}
+                        </span>
+                        <span class="unit-date">{{ video.releaseDate if video.releaseDate else '&nbsp;' | safe }}</span>
+                    </div>
+                </div>
+
+                <div class="unit-content-section">
+                    <div class="title-line">
+                        <span class="v-title">{{ video.video_title }}</span>
+                        {% if video.title_extras and video.title_extras != 'Behind' %}
+                            <span class="title-tag">{{ video.title_extras }}</span>
+                        {% endif %}
+                    </div>                    
+                    
+                    {# Original Note Slot logic #}
+                    {% if not suppress_notes_slot and video.video_notes %}
+                        <div class="v-notes">{{ video.video_notes }}</div>
+                    {% endif %}
+
+                    {# THE HIDDEN EXTENSION #}
+                    {% if video.songs %}
+                    <div id="songs-{{ video.video_id }}" class="music-extension">
+                        {% for song in video.songs %}
+                            <div class="m-item"><strong>{{ song.artist }} -</strong> {{ song.songtitle }}</div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </div>
+
+                <div class="unit-meta-section">
+                    <div class="v-participants">
+                        {% if is_music_show %}
+                            {% if video.mc_pairing %} 
+                                {{ video.mc_pairing }} 
+                                ({%- for mc in video.mc_names -%}
+                                    {% if mc.group %}{{ mc.group }} {% endif %}{{ mc.name }}{{ ", " if not loop.last }}
+                                {%- endfor -%})
+                            {% endif %}
+                        {% elif is_originals and (show_hosts or show_guests) %}
+                            {{ video.host_display if video.host_display else ('Guest: ' ~ video.guest_display if video.guest_display else '') }}
+                        {% elif show_guests and video.guest_display %}
+                            {{ video.guest_display }}
+                        {% elif is_livestream %}
+                            {{ video.livestream_tags | join(', ') if video.livestream_tags else '' }}
+                        {% elif if_series and video.video_notes %}
+                            {{ video.video_notes }}
+                        {% endif %}
+                    </div>
+
+                    {% if video.songs %}
+                    <div class="extension-control">
+                        <button class="arrow-trigger" onclick="toggleExtension('songs-{{ video.video_id }}', this)">
+                            [songs] <span class="arrow-icon">▼</span>
+                        </button>
+                    </div>
+                    {% endif %}
+
+                </div>
+            </article>
+        {% endfor %}
+    </div>
+{% endif %}
+
+<script>
+function toggleExtension(id, btn) {
+    const el = document.getElementById(id);
+    const isHidden = window.getComputedStyle(el).display === "none";
+    el.style.display = isHidden ? "block" : "none";
+    btn.innerHTML = isHidden ? '[hide] <span class="arrow-icon" style="transform:rotate(180deg)">▼</span>' : '[songs] <span class="arrow-icon">▼</span>';
+    btn.classList.toggle('active', isHidden);
+}
+</script>
+
+{% endblock %}

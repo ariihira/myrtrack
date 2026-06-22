@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{% endblock %}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    {% if is_portfolio %}
+    <div style="background: #e67e22; color: #fff; text-align: center; padding: 10px; font-size: 13px; font-weight: bold; letter-spacing: 0.5px; box-shadow: 0 2px 5px rgba(0,0,0,0.15); position: relative; z-index: 9999;">
+        ⚠️ PORTFOLIO SANDBOX MODE — System operations are simulated. — Database Last Update: 01.06.2026
+    </div>
+    {% endif %}
+
+    <div class="app-container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <span class="logo-icon">📂</span>
+                <h2>myrtrack</h2>
+            </div>
+            
+            <nav>
+                <p class="nav-label">Main Hub</p>
+                <ul>
+                    <li><a href="/">Dashboard</a></li>
+                    <li><a href="/kpopgroups">Kpop Groups</a></li>
+                </ul>
+
+                <p class="nav-label">K-Collections</p>
+                <ul>
+                    <li><a href="{{ url_for('view_collection', slug='originals') }}">Original Series</a></li>
+                    <li><a href="{{ url_for('view_collection', slug='variety') }}">TV/Variety</a></li>
+                    <li><a href="{{ url_for('view_collection', slug='music') }}">Music</a></li>
+                    <li><a href="{{ url_for('view_collection', slug='kdrama') }}">K-Drama</a></li>
+                    <li><a href="{{ url_for('view_collection', slug='moviedvd') }}">Movie/DVD</a></li>
+                </ul>
+
+                <p class="nav-label">Western & Web</p>
+                <ul>
+                    <li><a href="{{ url_for('view_collection', slug='series') }}">TV/Series</a></li>
+                    <li><a href="{{ url_for('view_collection', slug='movies') }}">Movies</a></li>
+                </ul>
+
+                <p class="nav-label">Others</p>
+                <ul>
+                    <li><a href="{{ url_for('view_collection', slug='misc') }}">Misc</a></li>
+                </ul>
+            </nav>
+        </aside>
+
+        <main class="main-content">
+            <header class="top-bar">
+                <form action="/search" method="GET" class="search-box">
+                    <input type="text" name="q" placeholder="Search idols, groups, or shows..." value="{{ request.args.get('q', '') }}">
+                </form>
+            </header>
+            
+            <div class="page-body">
+                {% block content %}{% endblock %}
+            </div>
+        </main>
+    </div>
+</body>
+</html>

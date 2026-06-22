@@ -1,0 +1,222 @@
+.home-welcome {
+    margin-bottom: 40px;
+}
+
+.home-welcome h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+/* Bento Grid: Clean & Airy */
+.home-grid {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+    gap: 30px;
+    margin-bottom: 60px;
+}
+
+.stats-container {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.bento-box {
+    background: white;
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: var(--card-shadow);
+}
+
+/* Banners (Idols & Videos) */
+.stat-banner {
+    padding: 20px;
+    border-radius: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: var(--card-shadow);
+    color: white;
+}
+
+.member-banner { background: var(--text-primary); } /* Darker Tone */
+.video-banner { background: var(--accent-soft); }   /* Softer Tone */
+
+.banner-label { font-weight: 600; text-transform: uppercase; font-size: 0.8rem; letter-spacing: 1px; }
+.banner-num { font-size: 1.8rem; font-weight: 800; }
+
+/* Stat Cards */
+.stats-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+.stat-card {
+    background: #ffffff;
+    /* This is the key: set a minimum height so they all look uniform */
+    min-height: 100px; 
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    
+    /* FLEXBOX CENTERING */
+    display: flex;
+    flex-direction: column;   /* Stacks the Number and the Label */
+    justify-content: center;  /* Centers vertically */
+    align-items: center;      /* Centers horizontally */
+    
+    text-align: center;
+}
+
+.stat-card .num {
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: var(--accent-soft); 
+}
+
+/* Category List */
+.cat-list { margin-top: 10px; }
+.cat-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+.cat-name { font-size: 0.9rem; color: var(--text-secondary); }
+.cat-dots {
+    flex-grow: 1;
+    border-bottom: 1px dotted var(--border-color);
+    margin: 0 8px;
+}
+.cat-val { font-weight: 700; color: var(--text-primary); }
+
+
+/* Left Column Workspace: Flat Clean Leaderboard Engine */
+.leaderboard-deck {
+    display: flex;
+    flex-direction: column;
+}
+
+.leaderboard-grid-mesh {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* 8 items form a perfect symmetric 4x2 structure */
+    column-gap: 40px;
+    row-gap: 5px;
+    justify-content: space-between;
+    flex-grow: 1;
+    margin-top: 25px;
+}
+
+.record-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px 5px;
+    border-bottom: 1px solid var(--border-color, #eef0f2);
+    min-width: 0;
+}
+
+.record-meta {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    padding-right: 15px;
+}
+
+.record-title {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    font-weight: 700;
+    color: var(--text-muted, #8e8e93);
+    margin-bottom: 4px;
+}
+
+.record-holder {
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+
+
+.record-score {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    flex-shrink: 0;
+}
+
+.score-num {
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: var(--accent-soft);
+    line-height: 1;
+}
+
+.score-label {
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    margin-top: 3px;
+}
+
+/* Responsive configurations */
+@media (max-width: 1100px) {
+    .leaderboard-grid-mesh {
+        grid-template-columns: 1fr; /* Switch cleanly to a single column array on narrower widths */
+    }
+}
+
+@media (max-width: 900px) {
+    .home-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+
+/* Disclaimer Rules */
+.home-disclaimer {
+    margin-top: 10px;
+}
+
+.disclaimer-box {
+    background-color: var(--sidebar-bg); /* Use the slightly darker neutral for depth */
+    padding: 25px 30px;
+    border-radius: 15px;
+    opacity: 0.8; /* Keeps it subtle */
+}
+
+.disclaimer-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 12px;
+}
+
+.disclaimer-icon {
+    color: var(--accent-warm);
+    font-weight: bold;
+}
+
+.disclaimer-box h3 {
+    margin: 0;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: var(--text-primary);
+}
+
+.disclaimer-box p {
+    font-size: 0.9rem;
+    line-height: 1.6;
+    color: var(--text-muted);
+    margin: 0 0 10px 0;
+}
+
+.disclaimer-footer {
+    font-style: italic;
+    font-size: 0.85rem !important;
+    margin-top: 15px !important;
+}

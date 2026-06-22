@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block title %}{{ group }} Archive{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/groups.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="directory-container">
+    <div class="directory-header">
+        <h1>All Artists</h1>
+        <p>An indexed directory of the {{ groups|length }} records in the archive.</p>
+    </div>
+
+    <div class="directory-list">
+    {% for group in groups %}
+    <div class="group-container">
+        <details class="group-dropdown">
+            <summary class="group-card">
+                <div class="title-section">
+                    <h3>{{ group.group_name }}</h3>
+                    <span class="type-tag">{{ group.grouptype }}</span>
+                </div>
+                <span class="dropdown-arrow">▼</span>
+            </summary>
+            
+            <div class="dropdown-content">
+                <a href="{{ url_for('group_page', id=group.group_id) }}" class="main-archive-btn">
+                    View Main Archive →
+                </a>
+                
+                {% if group.subunits %}
+                <a href="{{ url_for('group_page', id=group.group_id, view='full') }}" class="main-archive-btn">
+                    View Full Archive →
+                </a>
+                <ul class="subunit-list">
+                    {% for subunit in group.subunits %}
+                    <li>
+                        <a href="{{ url_for('group_page', id=subunit.group_id) }}" class="subunit-item-link">
+                            {{ subunit.group_name }}
+                        </a>
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+            </div>
+        </details>
+    </div>
+    {% endfor %}
+    </div>
+</div>
+
+<script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
+<script src="{{ url_for('static', filename='js/groups.js') }}"></script>
+{% endblock %}

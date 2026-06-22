@@ -1,0 +1,125 @@
+{% extends "base.html" %}
+
+{% block title %}Search Results for "{{ query }}"{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/search.css') }}">
+{% endblock %}
+
+{% block content %}
+<div class="collections-container">
+    
+    <!-- Header Block -->
+    <header class="collections-header">
+        <h1>Search Results for "{{ query }}"</h1>
+    </header>
+
+    <!-- ==================== TOP SECTION: SHOWS (COLLECTION LAYOUT) ==================== -->
+    <section class="collection-group">
+        <div class="group-header">
+            <h2>Matched Shows & Series</h2>
+            <span class="group-count">{{ shows|length }}</span>
+        </div>
+        
+        {% if shows %}
+            <div class="standard-grid">
+                {% for show in shows %}
+                <div class="standard-card">
+                    <a href="{{ url_for('show_detail', show_id=show.title_id) }}">
+                        <div class="standard-thumb" style="background-image: url('{{ url_for('static', filename=show.title_img) }}')"></div>
+                        <p class="standard-title">{{ show.title | safe }}</p>
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="search-empty-subtext">No show or series titles matched your search query.</p>
+        {% endif %}
+    </section>
+
+    <!-- ==================== BOTTOM SECTION: VIDEOS (EXACT TIMELINE LAYOUT) ==================== -->
+    <section class="collection-group">
+        <div class="group-header">
+            <h2>Matched Episodes & Appearances</h2>
+            <span class="group-count">{{ videos|length }}</span>
+        </div>
+
+        {% if videos %}
+            <div class="kt-stream">
+                {% for item in videos %}
+                    
+                    {# Month Separator Logic from Timeline #}
+                    {% set current_month = item.eventDate.strftime('%B %Y') %}
+                    {% if loop.first or current_month != videos[loop.index0 - 1].eventDate.strftime('%B %Y') %}
+                        <h2 class="kt-month-divider">{{ current_month }}</h2>
+                    {% endif %}
+
+                    <article class="kt-card">
+                        <div class="kt-side-info">
+                            <span class="kt-date">{{ item.eventDate.strftime('%d.%m') }}</span>
+                            
+                            {# Exact Status Tag Logic #}
+                            {% if item.is_host and item.var == 1 %}
+                                <span class="kt-tag tag-owner">HOST</span>
+                            {% endif %}
+
+                            {% if item.has_mc %}
+                                <span class="kt-tag tag-mc">MC</span>
+                            {% endif %}
+
+                            {% if item.guest_display and not item.is_host and not item.has_mc %}
+                                <span class="kt-tag tag-guest">GUEST</span>
+                            {% endif %}
+
+                            {# Title Extras Tag #}
+                            {% if item.ext %}
+                                <span class="kt-tag tag-extra">{{ item.ext | upper }}</span>
+                            {% endif %}
+                        </div>
+
+                        <div class="kt-main-info">
+                            <div class="kt-meta">
+                                <span class="kt-show">{{ item.show_titles | default('Independent', true) | safe }}</span>
+                                <span class="kt-owning">{{ item.display_group }}</span>
+                            </div>
+
+                            <h3 class="kt-video-title">
+                                {# Season Logic #}
+                                {% if item.season and item.season|int > 0 and item.season|int <= 1000 %}
+                                    <span class="kt-ep">S{{ item.season }}</span>
+                                {% endif %}
+
+                                {# Episode Logic #}
+                                {% set ep_val = item.episodeNumber | string | trim %}
+                                {% if ep_val and ep_val != '-1' %}
+                                    <span class="kt-ep">{% if ep_val.isdigit() %}E{% endif %}{{ ep_val }}</span>
+                                {% endif %}
+        
+                                {{ item.title | safe }}
+                            </h3>
+
+                            {% if item.guest_display %}
+                                <div class="kt-details">
+                                    <span class="kt-label">FEATURING: {{ item.guest_display }}</span>
+                                    <span class="kt-val"></span>
+                                </div>
+                            {% endif %}
+
+                            {% if item.notes %}
+                                <div class="kt-details">
+                                    <span class="kt-label">NOTES: {{ item.notes }}</span>
+                                    <span class="kt-val"></span>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </article>
+
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="search-empty-subtext">No video appearances matched your search query.</p>
+        {% endif %}
+    </section>
+
+</div>
+{% endblock %}

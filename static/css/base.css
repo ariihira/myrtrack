@@ -1,0 +1,99 @@
+:root {
+    /* Neutral Palette */
+    --bg-main: #f8f7f2;      /* Off-white/Cream */
+    --sidebar-bg: #eceae0;   /* Slightly darker neutral */
+    --text-primary: #3c3c3c; /* Soft charcoal, not black */
+    --text-muted: #8e8e8e;
+    --accent-soft: #a7adba;  /* Slate Blue (Masculine touch) */
+    --accent-warm: #d4a373;  /* Muted Terracotta (Feminine touch) */
+    --border-color: #e0ddd5;
+    --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+body {
+    margin: 0;
+    font-family: 'Inter', -apple-system, sans-serif;
+    background-color: var(--bg-main);
+    color: var(--text-primary);
+}
+
+.app-container {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* Sidebar: Simple & Modern */
+.sidebar {
+    width: 275px;
+    background-color: var(--sidebar-bg);
+    padding: 40px 20px;
+    border-right: 1px solid var(--border-color);
+}
+
+.sidebar-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 20px 10px;
+    margin-bottom: 30px;
+}
+
+.logo-icon {
+    font-size: 2.5rem; /* Bigger as requested */
+}
+
+.sidebar h2 {
+    font-weight: 800;
+    letter-spacing: -1px;
+    font-size: 1.8rem;
+    margin: 0;
+    color: var(--text-primary);
+}
+
+
+/* MAIN CONTENT - Added more padding to remove the sidebar 'hug' */
+.main-content {
+    flex: 1;
+    padding: 60px 80px; /* Increased padding to create the space you wanted */
+}
+
+/* SEARCH BAR - Kept original logic but tightened the width */
+.top-bar {
+    margin-bottom: 50px;
+    max-width: 600px; /* Constrained so it isn't awkward */
+}
+
+.search-box input {
+    width: 100%;
+    padding: 15px 25px;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    background: white;
+    box-shadow: var(--card-shadow);
+    outline: none;
+}
+
+
+/* NAVIGATION - Original logic from first suggestion */
+.nav-label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-muted);
+    margin: 20px 0 10px 10px;
+}
+
+nav ul { list-style: none; padding: 0; }
+nav ul li a {
+    text-decoration: none;
+    color: var(--text-primary);
+    padding: 10px 15px;
+    display: block;
+    border-radius: 8px;
+    transition: 0.2s;
+}
+
+nav ul li a:hover {
+    background-color: rgba(0,0,0,0.04);
+    color: var(--accent-warm);
+}
