@@ -42,9 +42,7 @@
     color: #666;
 }
 
-/* ============================================================
-   ARCHIVE STYLES - LEXEND & BURNT ORANGE
-   ============================================================ */
+
 .section-title {
     font-family: 'Lexend', sans-serif;
     font-size: 1.6rem;
@@ -63,6 +61,38 @@
     text-transform: uppercase;
     letter-spacing: 0.05em;
     margin: 40px 0 15px 0;
+}
+
+.season-label.collapsible {
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    user-select: none;
+    transition: background-color 0.2s ease, padding 0.2s ease;
+    padding: 8px 12px;
+    margin-left: -12px;
+    margin-right: -12px;
+    border-radius: 6px;
+}
+
+.season-label.collapsible:hover {
+    background-color: #fff5f2;
+}
+
+.season-toggle-icon {
+    font-size: 0.65rem;
+    transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    color: #c2410c;
+}
+
+.season-label.is-collapsed .season-toggle-icon {
+    transform: rotate(-90deg);
+}
+
+/* Hides the video elements when parent season is collapsed */
+.video-unit.season-collapsed {
+    display: none !important;
 }
 
 .video-unit {

@@ -196,15 +196,6 @@ def _get_portfolio_archive(target_id, scope):
     for key in archive_results:
         archive_results[key] = list({s['title_id']: s for s in archive_results[key]}.values())
         archive_results[key].sort(key=lambda x: (str(x.get('title', '')).lower(), int(x.get('title_id', 0))))
-        
-    # ─── 🔍 DROP THIS DIAGNOSTIC PRINT BLOCK HERE ───
-    print(f"\n🧩 [PORTFOLIO DEBUG] Target Group ID: {target_id} | Scope: {scope}")
-    print(f"👥 Active Group Filter IDs: {group_ids_set}")
-    for k, v in archive_results.items():
-        print(f"  ▪️ {k}: {len(v)} shows found")
-    print("="*40 + "\n")
-    # ───────────────────────────────────────────────
-    
     
     return archive_results
 

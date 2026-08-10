@@ -66,7 +66,7 @@
     {% set is_music_show = 7 in show.category_ids %}
     {% set is_livestream = 12 in show.category_ids %}
     {% set is_originals = 11 in show.category_ids %}
-    {% set show_hosts = is_originals and show.title_id in [103, 105, 108, 115, 122, 150] %}
+    {% set show_hosts = is_originals and show.title_id in [103, 105, 108, 115, 122, 150, 333] %}
     {% set show_guests = is_variety or 16 in show.category_ids %}
     {% set suppress_se = is_livestream or 16 in show.category_ids or is_originals %}
     {% set if_series = 2 in show.category_ids or 3 in show.category_ids %}
@@ -84,14 +84,17 @@
             {# EXACT SEASON HEADER LOGIC FROM ORIGINAL PROJECT #}
             {% if current_season_value and current_season_value != 'Season -' and current_season_value != ns.last_season %}
                 {% set season_name = show.season_names.get(current_season_value, none) %}
-                <div class="season-label">
-                    {% if video.is_numeric_season %}
-                        {% set season_number = current_season_value | int %}
-                        {% if season_number < 1000 %}Season {{ current_season_value }}{% else %}{{ current_season_value }}{% endif %}
-                        {{ ': ' ~ season_name if season_name else '' }}
-                    {% else %}
-                        {% if current_season_value == 'SPE' %}SPE{% else %}Season: {{ current_season_value }}{{ ': ' ~ season_name if season_name else '' }}{% endif %}
-                    {% endif %}
+                <div class="season-label collapsible" onclick="toggleSeason(this)">
+                    <span>
+                        {% if video.is_numeric_season %}
+                            {% set season_number = current_season_value | int %}
+                            {% if season_number < 1000 %}Season {{ current_season_value }}{% else %}{{ current_season_value }}{% endif %}
+                            {{ ': ' ~ season_name if season_name else '' }}
+                        {% else %}
+                            {% if current_season_value == 'SPE' %}SPE{% else %}Season: {{ current_season_value }}{{ ': ' ~ season_name if season_name else '' }}{% endif %}
+                        {% endif %}
+                    </span>
+                    <span class="season-toggle-icon">▼</span>   
                 </div>
                 {% set ns.last_season = current_season_value %}
             {% endif %}
@@ -188,6 +191,19 @@
 {% endif %}
 
 <script>
+// Interactive season collapse engine
+function toggleSeason(header) {
+    header.classList.toggle('is-collapsed');
+    let sibling = header.nextElementSibling;
+    while (sibling && !sibling.classList.contains('season-label')) {
+        if (sibling.classList.contains('video-unit')) {
+            sibling.classList.toggle('season-collapsed');
+        }
+        sibling = sibling.nextElementSibling;
+    }
+}
+
+// Toggle implementation for video songs extension lists
 function toggleExtension(id, btn) {
     const el = document.getElementById(id);
     const isHidden = window.getComputedStyle(el).display === "none";
