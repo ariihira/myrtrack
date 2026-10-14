@@ -45,7 +45,7 @@
                 <span class="category-count">{{ data|length }}</span>
             </div>
             <div class="standard-grid">
-                {% for show in data %}
+                {% for show in data[:15] %}
                 <div class="standard-card">
                     <a href="/show/{{ show.title_id }}?group_id={{ target_id }}&scope={{ scope }}">
                         <div class="standard-thumb" style="background-image: url('{{ url_for('static', filename=show.title_img) }}')"></div>
@@ -53,6 +53,27 @@
                     </a>
                 </div>
                 {% endfor %}
+
+                {% if data|length > 15 %}
+                <div class="standard-card minimal-toggle-card" role="button" tabindex="0" data-remainder="{{ data|length - 19 }}" aria-label="Toggle all {{ label }} titles">
+                    <div class="minimal-toggle-slot">
+                        <span class="minimal-toggle-primary">+{{ data|length - 15 }} more</span>
+                        <span class="minimal-toggle-sub">View all</span>
+                    </div>
+                </div>
+
+                <div class="expanded-items-wrapper is-hidden">
+                    {% for show in data[15:] %}
+                    <div class="standard-card">
+                        <a href="/show/{{ show.title_id }}?group_id={{ target_id }}&scope={{ scope }}">
+                            <div class="standard-thumb" style="background-image: url('{{ url_for('static', filename=show.title_img) }}')"></div>
+                            <p class="standard-title">{{ show.title }}</p>
+                        </a>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
             </div>
         </section>
         {% endif %}
@@ -73,4 +94,55 @@
         {{ render_section('Misc', gothers, group_id) }}
     </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('.minimal-toggle-card').forEach(toggleBtn => {
+        const grid = toggleBtn.closest('.standard-grid');
+        const section = toggleBtn.closest('.category-group');
+        const wrapper = grid ? grid.querySelector('.expanded-items-wrapper') : null;
+        if (!grid || !wrapper) return;
+
+        const remainder = toggleBtn.getAttribute('data-remainder');
+        const primaryText = toggleBtn.querySelector('.minimal-toggle-primary');
+        const subText = toggleBtn.querySelector('.minimal-toggle-sub');
+
+        const handleToggle = () => {
+            const isExpanded = toggleBtn.classList.contains('is-expanded');
+
+            if (!isExpanded) {
+                // EXPAND
+                wrapper.classList.remove('is-hidden');
+                toggleBtn.classList.add('is-expanded');
+                grid.appendChild(toggleBtn); // Moves neatly to the very end
+
+                if (primaryText) primaryText.textContent = 'Show less';
+                if (subText) subText.textContent = '↑ Collapse';
+            } else {
+                // COLLAPSE
+                wrapper.classList.add('is-hidden');
+                toggleBtn.classList.remove('is-expanded');
+                grid.insertBefore(toggleBtn, wrapper); // Return to 20th slot
+
+                if (primaryText) primaryText.textContent = `+${remainder} more`;
+                if (subText) subText.textContent = 'View all';
+
+                
+            }
+        };
+
+        toggleBtn.addEventListener('click', handleToggle);
+        toggleBtn.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault();
+                handleToggle();
+            }
+        });
+    });
+});
+
+</script>
+
+
 {% endblock %}
+

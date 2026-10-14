@@ -138,3 +138,69 @@
     text-decoration: none;
     color: inherit;
 }
+
+/* --- SHOW MORE (20TH CARD) & EXPANSION --- */
+.minimal-toggle-card {
+    cursor: pointer;
+    user-select: none;
+    display: flex;
+    flex-direction: column;
+}
+
+.minimal-toggle-slot {
+    width: 100%;
+    aspect-ratio: 16/9;
+    border-radius: 10px;
+    background: transparent;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    transition: border-color 0.2s ease, background-color 0.2s ease, transform 0.2s ease;
+    box-sizing: border-box;
+}
+
+.minimal-toggle-card:hover .minimal-toggle-slot,
+.minimal-toggle-card:focus-visible .minimal-toggle-slot {
+    border-color: var(--text-muted);
+    background-color: rgba(0, 0, 0, 0.015);
+    transform: translateY(-2px);
+}
+
+.minimal-toggle-card:focus-visible {
+    outline: none;
+}
+
+.minimal-toggle-primary {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    letter-spacing: -0.2px;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    transition: color 0.2s ease;
+}
+
+.minimal-toggle-sub {
+    font-size: 0.68rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--text-muted);
+    transition: color 0.2s ease;
+}
+
+.minimal-toggle-card:hover .minimal-toggle-sub {
+    color: var(--text-primary);
+}
+
+/* Hidden items container */
+.expanded-items-wrapper {
+    display: contents;
+}
+
+.expanded-items-wrapper.is-hidden {
+    display: none;
+}
